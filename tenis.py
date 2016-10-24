@@ -1,6 +1,6 @@
 import csv
 import os
-import requests
+#import requests
 import sys
 import re
 
@@ -28,12 +28,32 @@ def shrani(url, ime_datoteke, vsili_prenos=False):
             print('shranjeno!')
 
 
+def vsebina_datoteke(ime_datoteke):
+    with open(ime_datoteke) as datoteka:
+        vsebina = datoteka.read()
+
+def datoteke(imenik):
+    '''Vrne imena vseh datotek v danem imeniku skupaj z imenom imenika.'''
+    return [os.path.join(imenik, datoteka) for datoteka in os.listdir(imenik)]
+
+
+
 
 strani = ["1-100", "101-200", "201-300", "301-400", "401-500", "501-600", "601-700", "701-800", "801-900", "901-1000"]
 
-for stran in strani:
-    osnovni_naslov = 'http://www.atpworldtour.com/en/rankings/singles/'
-    parametri = 'rankDate=2016-10-17&countryCode=all'
-    naslov = '{}?{}&rankRange={}'.format(osnovni_naslov, parametri, stran)
-    datoteka = 'tenis/{}.txt'.format(stran)
-    shrani(naslov, datoteka)
+#for stran in strani:
+    #osnovni_naslov = 'http://www.atpworldtour.com/en/rankings/singles/'
+    #parametri = 'rankDate=2016-10-17&countryCode=all'
+    #naslov = '{}?{}&rankRange={}'.format(osnovni_naslov, parametri, stran)
+    #datoteka = 'tenis/{}.txt'.format(stran)
+    #shrani(naslov, datoteka)
+
+
+for mapa in datoteke("tekstovne datoteke"):
+    with open(mapa) as f:
+        vsebina = f.read()
+        for (i,j,k,l) in re.findall(r'<td class="rank-cell">.*?(\d{1,4}).*?</td>.*?alt="(\w{1,3})".*?data-ga-label="(.*?)".*?<td class="age-cell".*?(\d{2})', vsebina, flags=re.DOTALL):
+            print((i,j,k,l))
+
+
+
